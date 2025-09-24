@@ -37,7 +37,7 @@ class _CounterWidgetState extends State<CounterWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
-          // Countdown text
+          // Fuel text
           Center(
             child: Container(
               color: Colors.blue,
@@ -61,6 +61,44 @@ class _CounterWidgetState extends State<CounterWidget> {
             activeColor: Colors.blue,
             inactiveColor: Colors.red,
           ),
+
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Ignite
+                    });
+                  },
+                  child: const Text("Ignite"),
+                ),
+
+                SizedBox(width: 30,),
+
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Abort
+                    });
+                  },
+                  child: const Text("Abort"),
+                ),
+                
+                SizedBox(width: 30,),
+                
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Reset
+                    });
+                  },
+                  child: const Text("Reset"),
+                ),
+                
+              ],
+            ),
 
         ],
       ),
