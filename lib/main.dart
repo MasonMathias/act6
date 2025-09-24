@@ -37,6 +37,7 @@ class _CounterWidgetState extends State<CounterWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
+          // Countdown text
           Center(
             child: Container(
               color: Colors.blue,
@@ -47,6 +48,7 @@ class _CounterWidgetState extends State<CounterWidget> {
             ),
           ),
 
+          // Fuel slider
           Slider(
             min: 0,
             max: 100,
