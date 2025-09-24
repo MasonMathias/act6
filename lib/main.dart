@@ -9,9 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Rocket Launch Controller',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: CounterWidget(),
     );
   }
@@ -25,26 +23,70 @@ class CounterWidget extends StatefulWidget {
 class _CounterWidgetState extends State<CounterWidget> {
   //set counter value
   int _counter = 0;
+  Color textColor = Colors.red;
+  bool hitLiftoff = false;
+
+  void _ignite() {
+    setState(() {
+      if (_counter < 100) {
+        _counter += 1;
+      }
+    });
+  }
+
+  void _abort() {
+    setState(() {
+      if (_counter > 0) {
+        _counter -= 1;
+      }
+    });
+  }
+
+  void _reset() {
+    setState(() {
+      _counter = 0;
+    });
+  }
+
+  void _updatePanelColor() {
+    setState(() {
+      if (_counter == 0) {
+        textColor = Colors.red;
+      } else if (_counter <= 50) {
+        textColor = Colors.yellow;
+      } else if (_counter <= 100) {
+        textColor = Colors.lightGreen;
+      }
+    });
+  }
+
+  void _checkLiftoff() {
+    setState(() {
+      if (_counter == 100) {
+        hitLiftoff = true;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rocket Launch Controller'),
-      ),
+      appBar: AppBar(title: const Text('Rocket Launch Controller')),
 
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Liftoff text
+          hitLiftoff
+              ? Text('LIFTOFF', style: TextStyle(fontSize: 80))
+              : SizedBox(height: 80),
+          SizedBox(height: 20),
 
           // Fuel text
           Center(
             child: Container(
-              color: Colors.blue,
-              child: Text(
-                '$_counter',
-                style: TextStyle(fontSize: 50.0),
-              ),
+              color: textColor,
+              child: Text('$_counter', style: TextStyle(fontSize: 50.0)),
             ),
           ),
 
@@ -56,50 +98,55 @@ class _CounterWidgetState extends State<CounterWidget> {
             onChanged: (double value) {
               setState(() {
                 _counter = value.toInt();
+                _updatePanelColor();
+                _checkLiftoff();
               });
             },
             activeColor: Colors.blue,
-            inactiveColor: Colors.red,
+            inactiveColor: textColor,
           ),
 
           Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _ignite();
+                    _updatePanelColor();
+                    _checkLiftoff();
+                  });
+                },
+                child: const Text("Ignite"),
+              ),
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      // Ignite
-                    });
-                  },
-                  child: const Text("Ignite"),
-                ),
+              SizedBox(width: 30),
 
-                SizedBox(width: 30,),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _abort();
+                    _updatePanelColor();
+                  });
+                },
+                child: const Text("Abort"),
+              ),
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      // Abort
-                    });
-                  },
-                  child: const Text("Abort"),
-                ),
-                
-                SizedBox(width: 30,),
-                
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      // Reset
-                    });
-                  },
-                  child: const Text("Reset"),
-                ),
-                
-              ],
-            ),
+              SizedBox(width: 30),
 
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _reset();
+                    _updatePanelColor();
+                  });
+                },
+                child: const Text("Reset"),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 80),
         ],
       ),
     );
